@@ -1,0 +1,10 @@
+{
+  "include": ["src","public"],
+  "extends":["@douglasneuroinformatics/tsconfig"],
+  "compilerOptions":{
+    "module": "ESNext",
+    "moduleResolution":"Bundler",
+    "lib":["ESNext", "DOM", "DOM.Iterable"],
+  },
+
+}

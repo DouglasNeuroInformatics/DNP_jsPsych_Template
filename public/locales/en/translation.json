@@ -1,0 +1,12 @@
+{
+  "welcome": "Welcome. Press any key to begin",
+  "correctResponse": "Correct response:",
+  "loadingStimulus": "Loading stimulus",
+  "logResponse": "Log the response",
+  "correct": "Correct",
+  "incorrect": "Incorrect",
+  "responseWas": "The response was:",
+  "logNotes": "Log any other notes here",
+  "logResponseToContinue": "Log response and press submit to continue",
+  "submit": "Submit"
+}
