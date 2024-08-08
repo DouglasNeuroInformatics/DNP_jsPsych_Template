@@ -6,7 +6,7 @@ Usage
 Serving locally
 ------------
 
-To use this tempalte locally a simple http server can be used. Either download the dist from the github or build the package from source eg ``npm build`` Then the index.html file can be served locally.
+To use this template locally a simple http server can be used. Either download the dist from the github or build the package from source eg ``npm build`` Then the index.html file can be served locally.
 Python3 offers a command to serve the index.html locally with one command. First ensure python3 is installed. `It can be found here <https://www.python.org/downloads/>`_. Choose the appropriate package for the OS that you have. 
 Using a terminal or powershell first navitage to the directory containing the index.html file then:
 
@@ -43,16 +43,17 @@ Experiment settings are changed in the experimentSettings.csv file which is loca
 These settings are described below:
 
 - totalNumberOfTrialsToRun <number>: this is the number of images to be shown
-- advancementSchedule <number>: the number of correct answers that are required to increase the difficutly level by one
-- regressionSchedule <number>: the number of incorrect answers required to decrease the difficutly level by one
 - language <text>: the language of experiment, currently `en` or `fr`
 - seed <number>: a seed for the psuedorandom number generator
-- initialDifficulty <number>: the difficutly that the task will start with
+- adaptiveSchedule <true or false>: whether or not use a changing difficulty level
+- advancementSchedule <number>: the number of correct answers that are required to increase the difficulty by one
+- regressionSchedule <number>: the number of incorrect answers required to decrease the difficulty level by one
+- initialDifficulty <number>: the difficulty that the task will start with
 - numberOfLevels <number>: the number of levels that are available for the task
 
 .. csv-table:: experimentSettings :rst:dir:`csv-table`
-   :header: totalNumberOfTrialsToRun, advancementSchedule, regressionSchedule, language, seed, initialDifficulty, numberOfLevels,
-   5, 2, 0, en, 42, 1, 9
+  :header: totalNumberOfTrialsToRun,language,seed,adaptiveSchedule,advancementSchedule,regressionSchedule,initialDifficulty, numberOfLevels
+  5,en,42,false,2,0,1,9
 
 .. _adding-additional-languge
 

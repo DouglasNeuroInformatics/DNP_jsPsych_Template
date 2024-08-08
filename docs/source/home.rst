@@ -22,5 +22,6 @@ Contents
 
    home  
    usage
+   github-pages
 
 
