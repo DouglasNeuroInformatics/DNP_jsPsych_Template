@@ -1,28 +1,9 @@
-/* eslint-disable perfectionist/sort-objects */
-import DOMPurify from "dompurify";
-import { DataCollection } from "jspsych";
-export type ParticipantResponse = {
-  notes: string;
-  result: string;
-};
+import { $ExperimentResults } from "./schemas.ts";
 
-export type Trial = {
-  trialType: string;
-};
+import type { ExperimentResults, LoggingTrial } from "./schemas.ts";
+import type { DataCollection } from "/runtime/v1/jspsych@8.x";
 
-export type LoggingTrial = {
-  correctResponse: string;
-  difficultyLevel: string;
-  language: string;
-  response: ParticipantResponse;
-  rt: number;
-  stimulus: string;
-} & Trial;
-
-type ExperimentResults = {
-  responseNotes: string;
-  responseResult: string;
-} & Omit<LoggingTrial, "response" | "trialType">;
+import { DOMPurify } from "/runtime/v1/dompurify@3.x";
 
 function dataMunger(data: DataCollection) {
   const trials = data
@@ -30,16 +11,20 @@ function dataMunger(data: DataCollection) {
     .values() as LoggingTrial[];
   const experimentResults: ExperimentResults[] = [];
   for (let trial of trials) {
-    experimentResults.push({
-      stimulus: trial.stimulus,
+    // parsed experimentResults go here 
+    const result = $ExperimentResults.parse({
+      //example: 
+      /* stimulus: trial.stimulus,
       correctResponse: trial.correctResponse,
       difficultyLevel: trial.difficultyLevel,
       language: trial.language,
       rt: trial.rt,
       responseResult: trial.response.result,
-      responseNotes: DOMPurify.sanitize(trial.response.notes),
+      responseNotes: DOMPurify.sanitize(trial.response.notes), */
     });
+    experimentResults.push(result);
   }
+
   return experimentResults;
 }
 
@@ -74,9 +59,34 @@ function getLocalTime() {
 
   return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
 }
+
+function exportToJsonSerializable(data: ExperimentResults[]): {
+  [key: string]: unknown;
+} {
+  return {
+    version: "1.0",
+    timestamp: getLocalTime(),
+    experimentResults: data.map((result) => ({
+      // create appropriate mapping, example:
+      /* stimulus: result.stimulus,
+      correctResponse: result.correctResponse,
+      difficultyLevel: result.difficultyLevel,
+      language: result.language,
+      rt: result.rt,
+      responseResult: result.responseResult,
+      responseNotes: result.responseNotes, */
+    })),
+  };
+}
+
 export function transformAndDownload(data: DataCollection) {
   const mungedData = dataMunger(data);
   const dataForCSV = arrayToCSV(mungedData);
   const currentDate = getLocalTime();
   downloadCSV(dataForCSV, `${currentDate}.csv`);
+}
+export function transformAndExportJson(data: DataCollection): any {
+  const mungedData = dataMunger(data);
+  const jsonSerializableData = exportToJsonSerializable(mungedData);
+  return JSON.parse(JSON.stringify(jsonSerializableData));
 }

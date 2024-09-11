@@ -1,2 +1,0 @@
-totalNumberOfTrialsToRun,language,seed,adaptiveSchedule,advancementSchedule,regressionSchedule,initialDifficulty, numberOfLevels
-5,en,42,false,2,0,1,9

@@ -1,8 +1,8 @@
 {
-  "name": "picture-naming-task",
+  "name": "DNP jsPysch Template",
   "version": "0.1.0",
   "author": "Cian Monnin",
-  "description": "jsPysch implmentation of the Boston Naming Task with multilingual support",
+  "description": "<PLACEHOLDER>",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,27 +11,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@jspsych/plugin-html-button-response": "^2.0.0",
-    "@jspsych/plugin-html-keyboard-response": "^2.0.0",
-    "@jspsych/plugin-image-button-response": "^2.0.0",
-    "@jspsych/plugin-image-keyboard-response": "^2.0.0",
-    "@jspsych/plugin-preload": "^2.0.0",
-    "@jspsych/plugin-survey-html-form": "^2.0.0",
-    "@jspsych/plugin-survey-text": "^2.0.0",
-    "@types/dompurify": "^3.0.5",
-    "@types/node": "^20.14.12",
-    "dompurify": "^3.1.6",
-    "i18next": "^23.12.2",
-    "i18next-http-backend": "^2.5.2",
-    "jsdom": "^24.1.1",
-    "jspsych": "^8.0.1",
-    "papaparse": "^5.4.1",
-    "pure-rand": "^6.1.0"
+    "@opendatacapture/runtime-v1": "latest"
   },
   "devDependencies": {
     "@douglasneuroinformatics/eslint-config": "^4.3.0",
     "@douglasneuroinformatics/tsconfig": "^1.0.1",
-    "@types/papaparse": "^5.3.14",
+    "@types/node": "^20.14.12",
     "eslint": "^8.57.0",
     "typescript": "~5.5.4",
     "vite": "^5.3.4"
