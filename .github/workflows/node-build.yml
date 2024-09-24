@@ -46,10 +46,15 @@ jobs:
         with:
           # Upload dist folder
           path: "./dist"
-      - name: Copy Docsify Files
-        run: |
-          mkdir -p ./dist/docs
-          cp -r ./docs/* ./dist/docs/
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+  deploy_docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}/docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy docs
+      - run: pnpm docsify -g
+      - run: docsify ./docs
