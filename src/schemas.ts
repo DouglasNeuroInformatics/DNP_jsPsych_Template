@@ -2,7 +2,9 @@ import { z } from "/runtime/v1/zod@3.23.x";
 
 const $Language = z.enum(["en", "fr"]);
 
-/* const $ParticipantResponse = z.object({
+//  below are some examples of zod object used both creating types and zod validation
+
+const $ParticipantResponse = z.object({
   notes: z.string(),
   result: z.string(),
 });
@@ -40,12 +42,12 @@ export const $ExperimentImage = z.object({
   difficultyLevel: z.coerce.number().positive().int(),
   language: z.string(),
   stimulus: z.string(),
-}); */
+});
 
 export type SupportedLanguage = z.infer<typeof $Language>;
-/* export type ParticipantResponse = z.infer<typeof $ParticipantResponse>;
+export type ParticipantResponse = z.infer<typeof $ParticipantResponse>;
 export type Trial = z.infer<typeof $Trial>;
 export type LoggingTrial = z.infer<typeof $LoggingTrial>;
 export type ExperimentResults = z.infer<typeof $ExperimentResults>;
 export type Settings = z.infer<typeof $Settings>;
-export type ExperimentImage = z.infer<typeof $ExperimentImage>; */
+export type ExperimentImage = z.infer<typeof $ExperimentImage>;

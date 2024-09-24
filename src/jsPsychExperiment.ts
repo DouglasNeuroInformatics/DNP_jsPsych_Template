@@ -1,3 +1,5 @@
+// a generic jsPsych expieriment
+
 import type { Language } from "@opendatacapture/runtime-v1/@opendatacapture/runtime-core/index.js";
 
 import { transformAndDownload, transformAndExportJson } from "./dataMunger.ts";
@@ -39,8 +41,6 @@ export async function jsPsychExperiment(onFinish?: (data: any) => void) {
 
   settingsParseResult = $Settings.safeParse(experimentSettingsJson);
   imageDBParseResult = $ExperimentImage.array().safeParse(stimuliPaths);
-
-
   if (!settingsParseResult.success) {
     throw new Error("validation error, check experiment settings", {
       cause: settingsParseResult.error,
@@ -65,13 +65,14 @@ export async function jsPsychExperiment(onFinish?: (data: any) => void) {
 
   // small hack to get around i18n issues with wait for changeLanguage
   i18n.changeLanguage(language as Language);
-  await new Promise(function(resolve) {
+  await new Promise(function (resolve) {
     i18n.onLanguageChange = resolve;
   });
 
   /*
 functions for generating
 experimentStimuli
+specific to this experiment
 */
 
   const indiciesSelected = new Set();
@@ -110,6 +111,7 @@ experimentStimuli
 
   // draw an image at random from the bank depending on the difficulty_level selected
   // closure
+  // specific to this experiment
   function createStimuli(
     difficultyLevel: number,
     language: string,
@@ -128,7 +130,7 @@ experimentStimuli
   }
 
   // to handle clicks on a touchscreen as a keyboard response
-
+  // generically useful
   function simulateKeyPress(jsPsych: JsPsych, key: string) {
     jsPsych.pluginAPI.keyDown(key);
     jsPsych.pluginAPI.keyUp(key);
@@ -141,11 +143,11 @@ experimentStimuli
   // a trial is a single object eg htmlKeyboardResponse etc ...
   const timeline: any[] = [];
 
-  (function() {
+  (function () {
     let experimentStimuli = createStimuli(initialDifficulty, language, false);
     let currentDifficultyLevel = initialDifficulty;
     const jsPsych = initJsPsych({
-      on_finish: function() {
+      on_finish: function () {
         const data = jsPsych.data.get();
         if (downloadOnFinish) {
           transformAndDownload(data);
@@ -157,7 +159,7 @@ experimentStimuli
     });
 
     const welcome = {
-      on_start: function() {
+      on_start: function () {
         document.addEventListener(
           "click",
           () => simulateKeyPress(jsPsych, "a"),
@@ -176,7 +178,7 @@ experimentStimuli
     };
 
     const blankPage = {
-      on_start: function() {
+      on_start: function () {
         document.addEventListener(
           "click",
           () => simulateKeyPress(jsPsych, "a"),
@@ -187,7 +189,7 @@ experimentStimuli
       type: HtmlKeyboardResponsePlugin,
     };
     const showImg = {
-      on_start: function() {
+      on_start: function () {
         document.addEventListener(
           "click",
           () => simulateKeyPress(jsPsych, "a"),
@@ -208,7 +210,7 @@ experimentStimuli
         difficultyLevel: jsPsych.timelineVariable("difficultyLevel"),
         language: jsPsych.timelineVariable("language"),
       },
-      html: function() {
+      html: function () {
         const html = `
           <h3>${i18n.t("logResponse")}</h3>
           <input type="button" value="${i18n.t("correct")}" onclick="document.getElementById('result').value='${i18n.t("correct")}';">
@@ -221,7 +223,7 @@ experimentStimuli
           <p>${i18n.t("logResponseToContinue")}</p>`;
         return html;
       },
-      on_load: function() {
+      on_load: function () {
         const submitButton = document.getElementById(
           "jspsych-survey-html-form-next",
         ) as HTMLButtonElement;
@@ -237,7 +239,7 @@ experimentStimuli
           });
         });
       },
-      preamble: function() {
+      preamble: function () {
         const html = `<h3>${i18n.t("correctResponse")}</h3>
                     <p>${jsPsych.evaluateTimelineVariable("correctResponse")}</p>
                     <img src="${jsPsych.evaluateTimelineVariable("stimulus")}" width="300" height="300">`;
@@ -247,7 +249,7 @@ experimentStimuli
     };
     const testProcedure = {
       // to reload the experimentStimuli after one repetition has been completed
-      on_timeline_start: function() {
+      on_timeline_start: function () {
         this.timeline_variables = experimentStimuli;
       },
       timeline: [preload, blankPage, showImg, blankPage, logging],
@@ -256,7 +258,7 @@ experimentStimuli
     timeline.push(testProcedure);
 
     const loop_node = {
-      loop_function: function() {
+      loop_function: function () {
         // tracking number of corret answers
         // need to access logging trial info
         let clearSet = false;

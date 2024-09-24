@@ -11,16 +11,16 @@ function dataMunger(data: DataCollection) {
     .values() as LoggingTrial[];
   const experimentResults: ExperimentResults[] = [];
   for (let trial of trials) {
-    // parsed experimentResults go here 
+    // parsed experimentResults go here
     const result = $ExperimentResults.parse({
-      //example: 
-      /* stimulus: trial.stimulus,
+      //example:
+      stimulus: trial.stimulus,
       correctResponse: trial.correctResponse,
       difficultyLevel: trial.difficultyLevel,
       language: trial.language,
       rt: trial.rt,
       responseResult: trial.response.result,
-      responseNotes: DOMPurify.sanitize(trial.response.notes), */
+      responseNotes: DOMPurify.sanitize(trial.response.notes),
     });
     experimentResults.push(result);
   }
@@ -60,6 +60,7 @@ function getLocalTime() {
   return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
 }
 
+// for ODC
 function exportToJsonSerializable(data: ExperimentResults[]): {
   [key: string]: unknown;
 } {
@@ -68,13 +69,13 @@ function exportToJsonSerializable(data: ExperimentResults[]): {
     timestamp: getLocalTime(),
     experimentResults: data.map((result) => ({
       // create appropriate mapping, example:
-      /* stimulus: result.stimulus,
+      stimulus: result.stimulus,
       correctResponse: result.correctResponse,
       difficultyLevel: result.difficultyLevel,
       language: result.language,
       rt: result.rt,
       responseResult: result.responseResult,
-      responseNotes: result.responseNotes, */
+      responseNotes: result.responseNotes,
     })),
   };
 }

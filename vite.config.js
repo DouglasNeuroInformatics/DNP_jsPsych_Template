@@ -9,6 +9,7 @@ export default defineConfig({
     target: "es2022", //browsers can handle the latest ES features
   },
   resolve: {
+    // required for runtime imports
     alias: {
       "/runtime/v1": path.resolve(
         import.meta.dirname,
