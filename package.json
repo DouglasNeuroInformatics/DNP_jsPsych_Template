@@ -11,7 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@opendatacapture/runtime-v1": "latest"
+    "@opendatacapture/runtime-v1": "latest",
+    "docsify": "^4.13.1"
   },
   "devDependencies": {
     "@douglasneuroinformatics/eslint-config": "^4.3.0",
