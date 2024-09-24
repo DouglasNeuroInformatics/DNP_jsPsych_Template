@@ -37,7 +37,8 @@ jobs:
       - run: pnpm install
       - run: pnpm build
         env:
-          VITE_BASE: /githubRepoName/
+          # change this to name of GitHub repo if deploying to github-pages
+          VITE_BASE: /DNP_jsPsych_Template/
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
