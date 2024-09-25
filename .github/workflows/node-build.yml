@@ -46,7 +46,7 @@ jobs:
         run: |
           mkdir -p artifact
           cp -r dist/* artifact/
-          cp -r docs artifact/docs
+          cp -r docs/* artifact/docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
