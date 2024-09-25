@@ -17,17 +17,9 @@ Run `pnpm dev` or `pnpm bulid` followed by `pnpm preview` or `python -m http.ser
 
 A GitHub workflow for hosting on GitHub Pages has been provided.
 This file can be found in the `.github` directory.
-In addition to following the GitHub Pages [documentation](https://docs.github.com/en/pages),
-the GitHub repo name needs to put as the `VITE_BASE` environment varible.
-
-```yaml
-  - run: pnpm build
-      env:
-        VITE_BASE: /githubRepoName/
-```
+GitHub Pages [documentation](https://docs.github.com/en/pages),
 
 ## Docsify
 
 This project uses Docsify for the docs.
 To learn more about using Docsify, visit https://docsify.js.org.
-
