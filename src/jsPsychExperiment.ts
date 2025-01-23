@@ -14,19 +14,33 @@ import {
 } from "./schemas.ts";
 import { stimuliPaths } from "./stimuliPaths.ts";
 
-import { HtmlKeyboardResponsePlugin } from "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x";
-import { ImageKeyboardResponsePlugin } from "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x";
-import { PreloadPlugin } from "/runtime/v1/@jspsych/plugin-preload@2.x";
-import { SurveyHtmlFormPlugin } from "/runtime/v1/@jspsych/plugin-survey-html-form@2.x";
 import { DOMPurify } from "/runtime/v1/dompurify@3.x";
-import { initJsPsych } from "/runtime/v1/jspsych@8.x";
-import { JsPsych } from "/runtime/v1/jspsych@8.x";
 import {
   uniformIntDistribution,
   xoroshiro128plus,
 } from "/runtime/v1/pure-rand@6.x";
 
 export async function jsPsychExperiment(onFinish?: (data: any) => void) {
+  // need to do dynamic imports to satisfy ODC instrument bundler
+  const { SurveyHtmlFormPlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-survey-html-form@2.x"
+  );
+  const { ImageKeyboardResponsePlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x"
+  );
+  const { default: InstructionsPlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-instructions@2.x"
+  );
+  const { HtmlKeyboardResponsePlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x"
+  );
+  const { PreloadPlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-preload@2.x"
+  );
+  const { initJsPsych } = await import("/runtime/v1/jspsych@8.x");
+  const { JsPsych } = await import("/runtime/v1/jspsych@8.x");
+
+  const i18n = i18nSetUp();
   //****************************
   //****EXPERIMENT_SETTINGS*****
   //****************************
