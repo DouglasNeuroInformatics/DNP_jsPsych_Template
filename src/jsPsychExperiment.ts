@@ -4,7 +4,7 @@ import type { Language } from "@opendatacapture/runtime-v1/@opendatacapture/runt
 
 import { transformAndDownload, transformAndExportJson } from "./dataMunger.ts";
 import { experimentSettingsJson } from "./experimentSettings.ts";
-import i18n from "./i18n.ts";
+import i18nSetUp from "./i18n.ts";
 import {
   $ExperimentImage,
   $Settings,
@@ -27,9 +27,6 @@ export async function jsPsychExperiment(onFinish?: (data: any) => void) {
   );
   const { ImageKeyboardResponsePlugin } = await import(
     "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x"
-  );
-  const { default: InstructionsPlugin } = await import(
-    "/runtime/v1/@jspsych/plugin-instructions@2.x"
   );
   const { HtmlKeyboardResponsePlugin } = await import(
     "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x"
