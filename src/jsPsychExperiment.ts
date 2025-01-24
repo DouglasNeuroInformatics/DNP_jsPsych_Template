@@ -4,7 +4,7 @@ import type { Language } from "@opendatacapture/runtime-v1/@opendatacapture/runt
 
 import { transformAndDownload, transformAndExportJson } from "./dataMunger.ts";
 import { experimentSettingsJson } from "./experimentSettings.ts";
-import i18n from "./i18n.ts";
+import i18nSetUp from "./i18n.ts";
 import {
   $ExperimentImage,
   $Settings,
@@ -14,19 +14,35 @@ import {
 } from "./schemas.ts";
 import { stimuliPaths } from "./stimuliPaths.ts";
 
-import { HtmlKeyboardResponsePlugin } from "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x";
-import { ImageKeyboardResponsePlugin } from "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x";
-import { PreloadPlugin } from "/runtime/v1/@jspsych/plugin-preload@2.x";
-import { SurveyHtmlFormPlugin } from "/runtime/v1/@jspsych/plugin-survey-html-form@2.x";
 import { DOMPurify } from "/runtime/v1/dompurify@3.x";
-import { initJsPsych } from "/runtime/v1/jspsych@8.x";
-import { JsPsych } from "/runtime/v1/jspsych@8.x";
 import {
   uniformIntDistribution,
   xoroshiro128plus,
 } from "/runtime/v1/pure-rand@6.x";
 
 export async function jsPsychExperiment(onFinish?: (data: any) => void) {
+  // need to do dynamic imports to satisfy ODC instrument bundler
+  const { SurveyHtmlFormPlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-survey-html-form@2.x"
+  );
+  const { ImageKeyboardResponsePlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x"
+  );
+  const { HtmlKeyboardResponsePlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x"
+  );
+  const { PreloadPlugin } = await import(
+    "/runtime/v1/@jspsych/plugin-preload@2.x"
+  );
+  const { initJsPsych } = await import("/runtime/v1/jspsych@8.x");
+  type JsPsych = import("/runtime/v1/jspsych@8.x/index.js").JsPsych;
+
+  const i18n = i18nSetUp();
+  // needed to set the language of the experiment later
+  document.addEventListener("changeLanguage", function (event) {
+    // @ts-expect-error the event does have a detail
+    document.documentElement.setAttribute("lang", event.detail as string);
+  });
   //****************************
   //****EXPERIMENT_SETTINGS*****
   //****************************
