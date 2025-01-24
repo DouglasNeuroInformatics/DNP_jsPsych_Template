@@ -35,9 +35,14 @@ export async function jsPsychExperiment(onFinish?: (data: any) => void) {
     "/runtime/v1/@jspsych/plugin-preload@2.x"
   );
   const { initJsPsych } = await import("/runtime/v1/jspsych@8.x");
-  const { JsPsych } = await import("/runtime/v1/jspsych@8.x");
+  type JsPsych = import("/runtime/v1/jspsych@8.x/index.js").JsPsych;
 
   const i18n = i18nSetUp();
+  // needed to set the language of the experiment later
+  document.addEventListener("changeLanguage", function (event) {
+    // @ts-expect-error the event does have a detail
+    document.documentElement.setAttribute("lang", event.detail as string);
+  });
   //****************************
   //****EXPERIMENT_SETTINGS*****
   //****************************
