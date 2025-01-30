@@ -1,7 +1,7 @@
 import { experimentSettingsJson } from "./experimentSettings.ts";
 import { jsPsychExperiment } from "./jsPsychExperiment.ts";
 import { $ExperimentResults, $Settings } from "./schemas.ts";
-
+import { translator } from "./translations.ts";
 import type { Language } from "/runtime/v1/@opendatacapture/runtime-core";
 
 import "/runtime/v1/jspsych@8.x/css/jspsych.css";
@@ -28,7 +28,8 @@ export default defineInstrument({
           cause: settingsParseResult.error,
         });
       }
-
+      translator.init();
+      translator.changeLanguage(settingsParseResult.data.language);
       await jsPsychExperiment(done);
     },
   },
