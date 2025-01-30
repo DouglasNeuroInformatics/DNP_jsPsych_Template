@@ -1,10 +1,7 @@
 // a generic jsPsych expieriment
 
-import type { Language } from "@opendatacapture/runtime-v1/@opendatacapture/runtime-core/index.js";
-
 import { transformAndDownload, transformAndExportJson } from "./dataMunger.ts";
 import { experimentSettingsJson } from "./experimentSettings.ts";
-import i18nSetUp from "./i18n.ts";
 import {
   $ExperimentImage,
   $Settings,
@@ -13,6 +10,7 @@ import {
   type ParticipantResponse,
 } from "./schemas.ts";
 import { stimuliPaths } from "./stimuliPaths.ts";
+import { translator } from "./translations.ts";
 
 import { DOMPurify } from "/runtime/v1/dompurify@3.x";
 import {
@@ -23,21 +21,20 @@ import {
 export async function jsPsychExperiment(onFinish?: (data: any) => void) {
   // need to do dynamic imports to satisfy ODC instrument bundler
   const { SurveyHtmlFormPlugin } = await import(
-    "/runtime/v1/@jspsych/plugin-survey-html-form@2.x"
+    "/runtime/v1/@jspsych/plugin-survey-html-form@2.x/index.js"
   );
   const { ImageKeyboardResponsePlugin } = await import(
-    "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x"
+    "/runtime/v1/@jspsych/plugin-image-keyboard-response@2.x/index.js"
   );
   const { HtmlKeyboardResponsePlugin } = await import(
-    "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x"
+    "/runtime/v1/@jspsych/plugin-html-keyboard-response@2.x/index.js"
   );
   const { PreloadPlugin } = await import(
-    "/runtime/v1/@jspsych/plugin-preload@2.x"
+    "/runtime/v1/@jspsych/plugin-preload@2.x/index.js"
   );
-  const { initJsPsych } = await import("/runtime/v1/jspsych@8.x");
+  const { initJsPsych } = await import("/runtime/v1/jspsych@8.x/index.js");
   type JsPsych = import("/runtime/v1/jspsych@8.x/index.js").JsPsych;
 
-  const i18n = i18nSetUp();
   // needed to set the language of the experiment later
   document.addEventListener("changeLanguage", function (event) {
     // @ts-expect-error the event does have a detail
@@ -78,12 +75,6 @@ export async function jsPsychExperiment(onFinish?: (data: any) => void) {
     downloadOnFinish,
     initialDifficulty,
   } = settingsParseResult.data;
-
-  // small hack to get around i18n issues with wait for changeLanguage
-  i18n.changeLanguage(language as Language);
-  await new Promise(function (resolve) {
-    i18n.onLanguageChange = resolve;
-  });
 
   /*
 functions for generating
@@ -182,7 +173,7 @@ specific to this experiment
           { once: true },
         );
       },
-      stimulus: i18n.t("welcome"),
+      stimulus: translator.t("welcome"),
       type: HtmlKeyboardResponsePlugin,
     };
 
@@ -219,7 +210,7 @@ specific to this experiment
 
     const logging = {
       autofocus: "textBox",
-      button_label: i18n.t("submit"),
+      button_label: translator.t("submit"),
       data: {
         stimulus: jsPsych.timelineVariable("stimulus"),
         correctResponse: jsPsych.timelineVariable("correctResponse"),
@@ -228,15 +219,15 @@ specific to this experiment
       },
       html: function () {
         const html = `
-          <h3>${i18n.t("logResponse")}</h3>
-          <input type="button" value="${i18n.t("correct")}" onclick="document.getElementById('result').value='${i18n.t("correct")}';">
-          <input type="button" value="${i18n.t("incorrect")}" onclick="document.getElementById('result').value='${i18n.t("incorrect")}';">
+          <h3>${translator.t("logResponse")}</h3>
+          <input type="button" value="${translator.t("correct")}" onclick="document.getElementById('result').value='${translator.t("correct")}';">
+          <input type="button" value="${translator.t("incorrect")}" onclick="document.getElementById('result').value='${translator.t("incorrect")}';">
           <br>
-          <label for="result">${i18n.t("responseWas")}</label>
+          <label for="result">${translator.t("responseWas")}</label>
           <input type="text" id="result" name="result" readonly>
           <hr>
-          <input type="text" id="textBox" name="notes" placeholder="${i18n.t("logResponse")}">
-          <p>${i18n.t("logResponseToContinue")}</p>`;
+          <input type="text" id="textBox" name="notes" placeholder="${translator.t("logResponse")}">
+          <p>${translator.t("logResponseToContinue")}</p>`;
         return html;
       },
       on_load: function () {
@@ -256,7 +247,7 @@ specific to this experiment
         });
       },
       preamble: function () {
-        const html = `<h3>${i18n.t("correctResponse")}</h3>
+        const html = `<h3>${translator.t("correctResponse")}</h3>
                     <p>${jsPsych.evaluateTimelineVariable("correctResponse")}</p>
                     <img src="${jsPsych.evaluateTimelineVariable("stimulus")}" width="300" height="300">`;
         return DOMPurify.sanitize(html);
